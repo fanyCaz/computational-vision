@@ -15,6 +15,7 @@ print(img[0][0][0])
 
 # G = fr*R + fg*G + fb*B
 # Pregunta: ¿siempre se hace un floor o se hace un redondeo de acuerdo al decimal?
+# Siempre se trunca el valor para que no salga de los límites.
 print(math.trunc(20.8))
 print(int(img[0][0][0] * 1/3))
 
@@ -31,3 +32,4 @@ for i,row in enumerate(img):
   grey_matrix.append(row_pixels)
 
 #print(grey_matrix)
+# FALTA HACER LA CONVERSIÓN PARA CONVERTIR LA MATRIZ A UNA IMÁGEN
