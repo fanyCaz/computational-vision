@@ -22,6 +22,7 @@ print(img[0][0][0])
 
 ### COPY
 
+# EL CONVERTIR LA IMAGEN A GRISES DEBE SER UNA SUBRUTINA
 grey_img = img
 
 grey_matrix = []
@@ -65,8 +66,7 @@ def lighten_image(imagen,matrix):
 
 new_image = lighten_image(grey_img,grey_matrix)
 avoid_overflow(new_image)
-#cv.imwrite("new_imagen.png",new_image)
+cv.imwrite("new_imagen.png",new_image)
 #print(grey_matrix)
-# FALTA HACER LA CONVERSIÓN PARA CONVERTIR LA MATRIZ A UNA IMÁGEN
 
 # EN UN PROGRAMA DIFERENTE HACER PARA EL USUARIO EL ACLARADO, COPIADO Y NEGATIVO
