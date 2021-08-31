@@ -8,7 +8,6 @@ import utils
 # Se hace una normalización, para el valor relativo
 
 def lighten_image(image, betha):
-  #row_pixels = list(map(lambda pixel: pixel
   lighten_matrix = []
   lighten_dict = {}
 
