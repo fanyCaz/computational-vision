@@ -1,35 +1,30 @@
 import numpy as np
 import math
 import cv2 as cv
-
-img = cv.imread('similar.png')
-
-print(img)
+import pysnooper
 
 #PIXEL[row][column]
-print(img[0][0])
+# print(img[0][0])
 
 # RGB Red Green Blue
+# OPENCV retrieves Blue Green Red
 #RED VALUE
-print(img[0][0][0])
+# print(img[0,0,2])
 
+# Grey Conversion formula
 # G = fr*R + fg*G + fb*B
 # Pregunta: ¿siempre se hace un floor o se hace un redondeo de acuerdo al decimal?
 # Siempre se trunca el valor para que no salga de los límites.
-print(math.trunc(20.8))
-print(int(img[0][0][0] * 1/3))
+def convert_to_greyscale(image):
+  grey_matrix = []
+  red_freq = 1/3
+  green_freq = 1/3
+  blue_freq = 1/3
+  for i, row in enumerate(image):
+    row_pixels = list(map(lambda pixel: math.trunc(blue_freq*pixel[0] + green_freq*pixel[1] + red_freq*pixel[2]),row))
+    grey_matrix.append(row_pixels)
+  return np.array(grey_matrix)
 
-grey_matrix = []
-# Pregunta: ¿si les llama frequency o porque f?
-general_frequency = 1/3
-red_freq = 1/3
-green_freq = 1/3
-blue_freq = 1/3
-
-for i,row in enumerate(img):
-  row_pixels = list(map(lambda pixel: math.trunc(red_freq*pixel[0] + green_freq*pixel[1] + blue_freq*pixel[2]), row))
-  #print(row_pixels)
-  grey_matrix.append(row_pixels)
-
-#print(grey_matrix)
-# FALTA HACER LA CONVERSIÓN PARA CONVERTIR LA MATRIZ A UNA IMÁGEN
+img = cv.imread('../mina.jpeg')
+grey_img = convert_to_greyscale(img)
+cv.imwrite("mina_grey.png",grey_img)
