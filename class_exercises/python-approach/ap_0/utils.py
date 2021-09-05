@@ -20,7 +20,7 @@ the minimum value and the maximum value like: [0,2]
 def input_normalized(question: str, extra_constraint=None):
   res = input(question)
   try:
-    if float(res) < 1:
+    if float(res) < 0:
       print('Ingresa un número positivo')
       return input_normalized(question)
     else:
