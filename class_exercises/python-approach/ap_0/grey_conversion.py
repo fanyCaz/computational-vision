@@ -3,6 +3,7 @@ import math
 import cv2 as cv
 import pysnooper
 import utils
+import normalize
 
 #PIXEL[row][column]
 # print(img[0][0])
@@ -18,19 +19,18 @@ import utils
 # Siempre se trunca el valor para que no salga de los límites.
 def convert_to_greyscale(image):
   grey_matrix = []
-  grey_dict = {}
   red_freq = 1/3
   green_freq = 1/3
   blue_freq = 1/3
   for i, row in enumerate(image):
     row_pixels = list(map(lambda pixel: math.trunc(blue_freq*pixel[0] + green_freq*pixel[1] + red_freq*pixel[2]),row))
     grey_matrix.append(row_pixels)
-    grey_dict[i] = row_pixels
   greyscale = np.array(grey_matrix)
-  utils.save_matrix('greyscale.json', grey_dict)
+  utils.print_matrix('greyscale.txt', greyscale)
+  greyscale = normalize.normal(greyscale, 'greyscale_normalized.txt')
   return greyscale
 
-img = cv.imread('../mina.jpeg')
+img = cv.imread('mina_cortada.png')
 print("Size of image")
 print( img.shape )
 grey_img = convert_to_greyscale(img)

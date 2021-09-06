@@ -1,21 +1,22 @@
 import numpy as np
 import cv2 as cv
+import math
 import grey_conversion as grey_cv
 import utils
+import normalize
 
 def negative_image(image):
   negative_matrix = []
-  negative_dict = {}
 
   for i, row in enumerate(image):
     row_pixels = list(map(lambda pixel: 255 - pixel, row))
-    negative_matrix.append(row_pixels)
-    negative_dict[i] = [ str(j) for j in row_pixels ]
+    negative_matrix.append(np.trunc(row_pixels))
   negative = np.array(negative_matrix)
-  utils.save_matrix('negative.json', negative_dict)
+  utils.print_matrix('negative.txt', negative)
+  negative = normalize.normal(negative, 'negative_normalized.txt')
   return negative
 
-img = cv.imread("../mina.jpeg")
+img = cv.imread("mina_cortada.png")
 grey_img = grey_cv.convert_to_greyscale(img)
 negative_img = negative_image(grey_img)
 cv.imwrite("mina_negative.png", negative_img)
