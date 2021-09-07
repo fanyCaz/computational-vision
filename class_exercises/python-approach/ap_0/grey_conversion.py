@@ -31,7 +31,5 @@ def convert_to_greyscale(image):
   return greyscale
 
 img = cv.imread('mina_cortada.png')
-print("Size of image")
-print( img.shape )
 grey_img = convert_to_greyscale(img)
 cv.imwrite("mina_grey.png",grey_img)
