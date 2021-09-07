@@ -13,7 +13,6 @@ def negative_image(image):
     negative_matrix.append(np.trunc(row_pixels))
   negative = np.array(negative_matrix)
   utils.print_matrix('negative.txt', negative)
-  negative = normalize.normal(negative, 'negative_normalized.txt')
   return negative
 
 img = cv.imread("mina_cortada.png")
