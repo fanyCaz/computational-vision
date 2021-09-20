@@ -16,9 +16,9 @@ def umbral_selection(image,umbral):
   utils.print_matrix(matrix_name,under_umbral)
   return under_umbral
 
-img = cv.imread('mina_cortada.png')
+img = cv.imread('bosque_1_grey.png')
 grey_img = grey_cv.convert_to_greyscale(img)
-umbral = utils.input_normalized("Ingresa el valor de umbral de interés: ",[0,255])
+umbral = utils.input_normalized("Ingresa el valor de umbral de interés: ",[1,254])
 umbral_img = umbral_selection(grey_img, umbral)
-name_img = f"mina_umbral_{umbral}.png"
+name_img = f"bosque_1_umbral_{umbral}.png"
 cv.imwrite(name_img,umbral_img)
