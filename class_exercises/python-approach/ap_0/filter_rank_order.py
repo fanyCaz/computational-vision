@@ -16,7 +16,7 @@ def rank_order(image):
 
   for i,pixel in enumerate(sorted_img):
     sum_intensity = sum(list(map(lambda pxl: abs(pixel-pxl),sorted_img)))
-    if sum_intensity < closer_to_mean:
+    if abs(sum_intensity - mean) < closer_to_mean:
       idx_closer_to_mean = i
       closer_to_mean = sum_intensity
   rank_value = sorted_img[idx_closer_to_mean]
@@ -28,7 +28,7 @@ def rank_order(image):
   return filtered
 
 
-img = cv.imread("bosque_1.jpeg")
+img = cv.imread("bosque_1_grey.png")
 grey_img = grey_cv.convert_to_greyscale(img)
 width = img.shape[1]
 height = img.shape[0]

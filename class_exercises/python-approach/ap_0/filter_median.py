@@ -15,14 +15,14 @@ def median_filter(image):
   print(f"Median value: {median}")
 
   for i,row in enumerate(image):
-    row_pixels = list(map(lambda pixel: median if ((abs(mean - pixel)*100)/mean) > 10 else pixel, row))
+    row_pixels = list(map(lambda pixel: median if ((abs(mean - pixel)*100)/mean) > 7 else pixel, row))
     filtered_matrix.append(row_pixels)
   filtered = np.array(filtered_matrix)
   utils.print_matrix("filter_median.txt",filtered)
   return filtered
 
-img = cv.imread("old_photo.jpeg")
+img = cv.imread("bosque_1_umbral_85.png")
 grey_img = grey_cv.convert_to_greyscale(img)
 #cv.imwrite("old_photo_grey.png",grey_img)
 median_filtered_img = median_filter(grey_img)
-cv.imwrite("old_photo_median_filtered.png",median_filtered_img)
+cv.imwrite("bosque_1_median_filtered.png",median_filtered_img)
