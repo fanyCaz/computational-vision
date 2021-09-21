@@ -13,6 +13,8 @@ def print_matrix(name: str, matrix):
     f.write("\n")
   f.close()
 
+# Print matrix to csv
+
 """
 Optional: extra_constraint can receive an array of two elements,
 the minimum value and the maximum value like: [0,2]
@@ -33,3 +35,29 @@ def input_normalized(question: str, extra_constraint=None):
     print('Ingresa un número , porfavor')
     return input_normalized(question)
   return res
+
+"""
+points in image
+--------------
+|            |
+|  a    b    |
+|            |
+|  c    d    |
+|            |
+--------------
+"""
+def choose_image_section(width, heigth)->list:
+  print("--------------")
+  print("|  a    b    |")
+  print("|  c         |")
+  print("|            |")
+  print("|  d         |")
+  print("|            |")
+  print("--------------")
+  a=b=c=d=[]
+  a = int(input_normalized('Ingresa el punto a :', [0,width-1]))
+  b = int(input_normalized('Ingresa el punto b :', [a+1,width]))
+  c = int(input_normalized('Ingresa el punto c :', [0,heigth-1]) )
+  d = int(input_normalized('Ingresa el punto d :', [c+1,heigth]) )
+
+  return a,b,c,d
