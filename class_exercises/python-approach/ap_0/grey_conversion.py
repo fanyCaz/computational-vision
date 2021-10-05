@@ -22,6 +22,7 @@ def convert_to_greyscale(image):
   red_freq = 1/3
   green_freq = 1/3
   blue_freq = 1/3
+  utils.print_matrix('rgb_intesities_estrellas.txt',image)
   for i, row in enumerate(image):
     row_pixels = list(map(lambda pixel: math.trunc(blue_freq*pixel[0] + green_freq*pixel[1] + red_freq*pixel[2]),row))
     grey_matrix.append(row_pixels)
@@ -30,6 +31,10 @@ def convert_to_greyscale(image):
   greyscale = normalize.normal(greyscale, 'greyscale_normalized.txt')
   return greyscale
 
-img = cv.imread('mina_cortada.png')
-grey_img = convert_to_greyscale(img)
-cv.imwrite("mina_grey.png",grey_img)
+def main():
+  img = cv.imread('estrellas.jpeg')
+  grey_img = convert_to_greyscale(img)
+  cv.imwrite("estrellas_grey.png",grey_img)
+
+if __name__ == '__main__':
+  main()

@@ -16,6 +16,7 @@ def rank_order(image):
 
   for i,pixel in enumerate(sorted_img):
     sum_intensity = sum(list(map(lambda pxl: abs(pixel-pxl),sorted_img)))
+    # hay que imprimir la matriz de intensidades, osea, la lambda de arriba
     if abs(sum_intensity - mean) < closer_to_mean:
       idx_closer_to_mean = i
       closer_to_mean = sum_intensity
