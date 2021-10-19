@@ -6,15 +6,26 @@ import pysnooper
 
 def search_grid(image,i,j,pivot,alpha):
   neighbours = []
-  east = abs(image[i,j+1] - pivot) <= alpha
-  south = abs(image[i+1,j] - pivot) <= alpha
-  neast = abs(image[i+1,j+1] - pivot) <= alpha
-  if east:
-    neighbours.append({'pixel':image[i,j+1],'i': i, 'j': j+1})
-  if south:
-    neighbours.append({'pixel':image[i+1,j],'i': i+1, 'j': j})
-  if neast:
-    neighbours.append({'pixel':image[i+1,j+1],'i': i+1, 'j': j+1})
+  n = e = s = w = ne = se = sw = nw = False
+  #North, East, South, West, and derivades
+  if i - 1 > 0 or j - 1 > 0:
+    n = abs(image[i-1,j] - pivot) <= alpha
+    w = abs(image[i,j-1] - pivot) <= alpha
+    ne = abs(image[i-1,j+1] - pivot) <= alpha
+    sw = abs(image[i+1,j-1] - pivot) <= alpha
+    nw = abs(image[i-1,j-1] - pivot) <= alpha
+  e = abs(image[i,j+1] - pivot) <= alpha
+  s = abs(image[i+1,j] - pivot) <= alpha
+  se = abs(image[i+1,j+1] - pivot) <= alpha
+
+  if n:
+    neighbours.append([ i, j+1])
+  if s:
+    neighbours.append([i+1, j])
+  if w:
+    neighbours.append([i,j-1])
+  if e:
+    neighbours.append([])
   return neighbours
 # Se tiene que hacer un buscador, una funcion que busque en las orillas de la imagen, y asi pueda guardar los vecinos que quedan
 def calculate_neighbour(image,alpha):
@@ -22,19 +33,31 @@ def calculate_neighbour(image,alpha):
   i = 0
   j = 0
   print(f"pivote _ {pivot}")
-  neighbours = {}
-  neighbours[pivot] = []
-  neighbours[pivot].append( search_grid(image,i,j,pivot,alpha) )
-  neighbours[pivot] = np.array(neighbours[pivot]).flatten()
-
+  #search_grid(image,i,j,pivot,alpha)
+  #used = []
+  #neighbours = {}
+  #id_neighbourhood = 0
+  """
+  neighbours[id_neighbourhood] = [] 
+  neighbours[id_neighbourhood].append({'i': i,'j': j})
+  neighbours[id_neighbourhood].append( search_grid(image,i,j,pivot,alpha) )
+  print(neighbours)
+  neighbours[id_neighbourhood] = np.array(neighbours[id_neighbourhood]).flatten()
+  """
+    #se le debe aplicar un color a cada vecindario que no se repita y random,o crear una lista de 100 colores disponibles
   print("First iteration")
   print(neighbours)
-
-  next_i = neighbours[pivot][0]['i'] 
-  next_j = neighbours[pivot][0]['j'] 
+  #checar sólo los habilitados
+  #checar si está en usados o no
+  #habilita el pedazo de matriz que ocupa
+  #flag los elementos que ya han sido obtenidos
+  """
+  next_i = neighbours[id_neighbourhood][0]['i'] 
+  next_j = neighbours[id_neighbourhood][0]['j'] 
   #search_grid(image,next_i,next_j,pivot,alpha)
-  neighbours[pivot] = np.append( neighbours[pivot], search_grid(image,next_i,next_j,pivot,alpha) )
-  neighbours[pivot] = np.array(neighbours[pivot]).flatten()
+  neighbours[id_neighbourhood] = np.append( neighbours[id_neighbourhood], search_grid(image,next_i,next_j,pivot,alpha) )
+  neighbours[id_neighbourhood] = np.array(neighbours[id_neighbourhood]).flatten()
+  """
   """ 
   for i,row in enumerate(image):
     for j, pixel in enumerate(row):
