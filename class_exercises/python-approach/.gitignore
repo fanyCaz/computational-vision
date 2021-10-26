@@ -9,3 +9,4 @@ share/
 *.txt
 *.jpg
 __pycache__*/
+*.csv
