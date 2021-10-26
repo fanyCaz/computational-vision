@@ -3,10 +3,27 @@ import numpy as np
 
 class PivotFound(Exception): pass
 
+#c_i current i
+#c_j current j
+def getAvailableNeighbours(image,c_i,c_j):
+  available = []
+  print(c_i)
+  print("longitudes")
+  no_rows = len(image)
+  no_columns = len(image[0])
+  print(f"no rows {no_rows} no cols {no_columns}")
+  # row search
+  for i in range(c_i-1,c_i+2):
+    for j in range(c_j-1,c_j+2):
+      is_in_range = i >= 0 and j >= 0 and i < no_rows and j < no_columns
+      if is_in_range:
+        available.append([i,j])
+  return available
+
 def main():
   colors = np.array([255,0,0])
   alpha_cut = 10
-  grey_img = np.array([[78,86,88,97,104],[85,92,97,103,111],[93,98,103,109,114],[100,105,111,116,120],[105,112,117,122,128]])
+  grey_img = np.array([[78,86,88,97,104],[85,92,97,103,111],[93,98,103,109,114],[100,105,111,116,120],[105,112,117,122,128],[10,13,12,130,12]])
   i = 0
   j = 0
   pivot = grey_img[i,j]
@@ -38,6 +55,7 @@ def main():
 
   print(neighbour[pivot])
   print( available[-1] in used )
+  print("PIXELES OCUPADOS")
   print(used)
   #search for next not used pixel
   try:
@@ -53,8 +71,9 @@ def main():
   pivots.append(grey_img[row,column])
   print(pivots)
   #Aqui como ya encontraste el siguiente pivote, puedes hacer lo de arriba de nuevo, asi que hay que ponerlo en funcion, pero primero prueba que si funcione aqui
-  print(segmented_matrix)
   used = []
+  print(f"que se le envia r_ {row} c_{column}")
+  getAvailableNeighbours(grey_img,row,column)
 
 if __name__ == '__main__':
   main()
