@@ -12,10 +12,11 @@ def negative_image(image):
     row_pixels = list(map(lambda pixel: 255 - pixel, row))
     negative_matrix.append(np.trunc(row_pixels))
   negative = np.array(negative_matrix)
-  utils.print_matrix('negative.txt', negative)
   return negative
 
-img = cv.imread("mina_cortada.png")
+image_name = "bosque_cortado.png"
+img = cv.imread(image_name)
 grey_img = grey_cv.convert_to_greyscale(img)
 negative_img = negative_image(grey_img)
-cv.imwrite("mina_negative.png", negative_img)
+utils.print_matrix(image_name+"_negativo.csv", negative_img)
+cv.imwrite(image_name+"_negativo.png", negative_img)

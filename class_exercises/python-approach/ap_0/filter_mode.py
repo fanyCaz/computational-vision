@@ -16,10 +16,12 @@ def mode_filter(image):
     row_pixels = list(map(lambda pixel: mode if ((abs(mean - pixel)*100/mean)) > 10 else pixel,row))
     filtered_matrix.append(row_pixels)
   filtered = np.array(filtered_matrix)
-  utils.print_matrix("filter_mode.txt",filtered)
   return filtered
 
-img = cv.imread("old_photo.jpeg")
+image_name = "old_photo.jpeg"
+img = cv.imread(image_name)
+imagen_name = image_name.replace('.','')
 grey_img = grey_cv.convert_to_greyscale(img)
 mode_filtered_img = mode_filter(grey_img)
-cv.imwrite("old_photo_mode_filtered.png",mode_filtered_img)
+utils.print_matrix(image_name+"_mode_filter.csv",mode_filtered_img)
+cv.imwrite(image_name+"_mode_filter.png",mode_filtered_img)

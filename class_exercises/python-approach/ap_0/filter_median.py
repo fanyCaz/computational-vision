@@ -18,11 +18,13 @@ def median_filter(image):
     row_pixels = list(map(lambda pixel: median if ((abs(mean - pixel)*100)/mean) > 7 else pixel, row))
     filtered_matrix.append(row_pixels)
   filtered = np.array(filtered_matrix)
-  utils.print_matrix("filter_median.txt",filtered)
   return filtered
 
-img = cv.imread("bosque_1_umbral_85.png")
+image_name = "bosque_cortado.png"
+img = cv.imread(image_name)
+image_name = image_name.replace('.','')
 grey_img = grey_cv.convert_to_greyscale(img)
 #cv.imwrite("old_photo_grey.png",grey_img)
 median_filtered_img = median_filter(grey_img)
-cv.imwrite("bosque_1_median_filtered.png",median_filtered_img)
+utils.print_matrix(image_name+"_median_filter.csv",median_filtered_img)
+cv.imwrite(image_name+"_median_filter.png",median_filtered_img)

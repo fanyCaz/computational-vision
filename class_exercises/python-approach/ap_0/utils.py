@@ -1,10 +1,11 @@
 import json
+import csv
 
 def save_matrix(name: str, dictionary):
   with open(name,'w') as json_file:
     json.dump(dictionary,json_file, indent=2)
 
-def print_matrix(name: str, matrix):
+def print_matrix_txt(name: str, matrix):
   f = open(name, 'w')
   for i,row in enumerate(matrix):
     f.write(str(i) + '\n')
@@ -12,6 +13,14 @@ def print_matrix(name: str, matrix):
       f.write(str(pixel) + ' - ')
     f.write("\n")
   f.close()
+
+def print_matrix(name: str, matrix):
+  with open(name, mode= 'w') as f:
+    writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+    for row in matrix:
+      writer.writerow(row)
+    f.close()
 
 # Print matrix to csv
 

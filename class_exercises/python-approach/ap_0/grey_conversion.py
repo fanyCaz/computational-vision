@@ -27,14 +27,16 @@ def convert_to_greyscale(image):
     row_pixels = list(map(lambda pixel: math.trunc(blue_freq*pixel[0] + green_freq*pixel[1] + red_freq*pixel[2]),row))
     grey_matrix.append(row_pixels)
   greyscale = np.array(grey_matrix)
-  utils.print_matrix('greyscale.txt', greyscale)
   greyscale = normalize.normal(greyscale, 'greyscale_normalized.txt')
   return greyscale
 
 def main():
-  img = cv.imread('estrellas.jpeg')
+  image_name = "estrellas.jpeg"
+  img = cv.imread(image_name)
+  image_name = image_name.replace('.','')
   grey_img = convert_to_greyscale(img)
-  cv.imwrite("estrellas_grey.png",grey_img)
+  utils.print_matrix(image_name+"_grey.csv", grey_img)
+  cv.imwrite(image_name+"_grey.png",grey_img)
 
 if __name__ == '__main__':
   main()

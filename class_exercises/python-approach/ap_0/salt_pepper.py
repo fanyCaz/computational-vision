@@ -28,4 +28,5 @@ print(f"El ancho de la imagen es {width} y la altura es {height}")
 a,b,c,d = utils.choose_image_section(width,height)
 cut_img = grey_img[c:d,a:b]
 noisless_img = noise_removal(cut_img)
+utils.print_matrix("salt_pepper.csv", noisless_img)
 cv.imwrite("salt_noiseless_salt_pepper.png", noisless_img)

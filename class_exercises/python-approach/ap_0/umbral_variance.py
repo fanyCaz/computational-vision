@@ -63,6 +63,7 @@ def main():
   print(best_umbral)
   #Retorna el mejor umbral y llama a función de umbral con este valor
   umbral_img = umbral.umbral_selection(cut_img, best_umbral)
+  utils.print_matrix("mina_umbral_variance.csv",umbral_img)
   cv.imwrite("mina_umbral_variance.png",umbral_img)
 
 if __name__ == '__main__':

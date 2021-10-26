@@ -12,7 +12,7 @@ def umbral_selection(image,umbral):
     row_pixels = list(map(lambda pixel: 0 if pixel < umbral else 255,row))
     umbral_matrix.append(row_pixels)
   under_umbral = np.array(umbral_matrix)
-  matrix_name = f"umbral_{umbral}.txt"
+  matrix_name = f"umbral_{umbral}.csv"
   utils.print_matrix(matrix_name,under_umbral)
   return under_umbral
 

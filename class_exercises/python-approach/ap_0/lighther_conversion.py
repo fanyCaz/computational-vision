@@ -15,8 +15,8 @@ def lighten_image(image, betha):
     row_pixels = list(map(lambda pixel: math.trunc(pixel + betha), row))
     lighten_matrix.append(row_pixels)
   lightened = np.array(lighten_matrix)
-  utils.print_matrix('lightened.txt', lightened)
-  lightened = normalize.normal(lightened, 'lightened_normalized.txt')
+  utils.print_matrix('lightened.csv', lightened)
+  lightened = normalize.normal(lightened, 'lightened_normalized.csv')
   return lightened
 
 img = cv.imread("mina_cortada.png")

@@ -17,6 +17,7 @@ def rank_order(image):
   for i,pixel in enumerate(sorted_img):
     sum_intensity = sum(list(map(lambda pxl: abs(pixel-pxl),sorted_img)))
     # hay que imprimir la matriz de intensidades, osea, la lambda de arriba
+    utils.print_matrix_txt(sum_intensity)
     if abs(sum_intensity - mean) < closer_to_mean:
       idx_closer_to_mean = i
       closer_to_mean = sum_intensity
@@ -29,7 +30,9 @@ def rank_order(image):
   return filtered
 
 
-img = cv.imread("bosque_1_grey.png")
+image_name = "bosque_1_grey.png"
+img = cv.imread(image_name)
+image_name = image_name.replace('.','')
 grey_img = grey_cv.convert_to_greyscale(img)
 width = img.shape[1]
 height = img.shape[0]
@@ -41,4 +44,5 @@ cut_img = grey_img[c:d,a:b]
 cv.imwrite("bosque_cortado.png",cut_img)
 #grey_img = np.array([[45,56,65],[70,81,84],[88,90,216]])
 rank_filtered_img = rank_order(cut_img)
-cv.imwrite("bosque_rank_filtered.png", rank_filtered_img)
+utils.print_matrix(image_name"_filter_rank_order.csv",rank_filtered_img)
+cv.imwrite(image_name+"_filter_rank_order.png", rank_filtered_img)
