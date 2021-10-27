@@ -22,11 +22,7 @@ def getNexPivot(image,alread_used):
   #search for next pixel not used
   #quitar el enumerate e irse por range mejor para que solo recorra numeros
   for row in range(0,len(image)):
-    for column in enumerate(0,len(image[0]):
-      if [row,column] not in alread_used:
-        return [row,column]
-  for row,pixel in enumerate(image):
-    for column,val in enumerate(pixel):
+    for column in range(0,len(image[0])):
       if [row,column] not in alread_used:
         return [row,column]
 
@@ -70,15 +66,13 @@ def segment_image(image,alpha_cut):
   segmented_matrix = np.array(segmented_matrix)
   return segmented_matrix
 
-def main():
+if __name__ == '__main__':
   alpha_cut = input_normalized('Ingresa el valor de corte: ')
   #grey_img = np.array([[78,86,88,97,104],[85,92,97,103,111],[93,98,103,109,114],[100,105,111,116,120],[105,112,117,122,128],[10,19,11,10,12]])
   image_name = "mina_cortada.png"
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
+  print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)
   segmented_image = segment_image(grey_img,alpha_cut)
   print_matrix(image_name+'_segmented_matrix.csv', segmented_image)
   cv.imwrite(image_name+"segmented_matrix.png", segmented_image)
-
-if __name__ == '__main__':
-  main()
