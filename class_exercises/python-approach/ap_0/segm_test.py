@@ -10,7 +10,6 @@ def getAvailableNeighbours(image,c_i,c_j,alread_used):
   no_rows = len(image)
   no_columns = len(image[0])
   # row search
-  #esto podría ser un lambda
   for i in range(c_i-1,c_i+2):
     for j in range(c_j-1,c_j+2):
       is_in_range = i >= 0 and j >= 0 and i < no_rows and j < no_columns
@@ -20,10 +19,9 @@ def getAvailableNeighbours(image,c_i,c_j,alread_used):
 
 def getNexPivot(image,alread_used):
   #search for next pixel not used
-  #quitar el enumerate e irse por range mejor para que solo recorra numeros
   for row in range(0,len(image)):
     for column in range(0,len(image[0])):
-      if [row,column] not in alread_used:
+      if [int(row),int(column)] not in alread_used:
         return [row,column]
 
 """
@@ -44,6 +42,7 @@ def segment_image(image,alpha_cut):
     if sum_matrix == 0:
       pivot = [0,0]
     else:
+      #pivot = [min_i,min_j]
       pivot = getNexPivot(image,used)
     row = pivot[0]
     column = pivot[1]
@@ -59,20 +58,22 @@ def segment_image(image,alpha_cut):
         if abs(current_pixel - value_pivot) <= alpha_cut and pixel not in used:
           used.append([pixel[0],pixel[1]])
           available = available + getAvailableNeighbours(image,pixel[0],pixel[1],used)
-          segmented_matrix[pixel[0],pixel[1]] = value_pivot
+          segmented_matrix[pixel[0],pixel[1]] = int(value_pivot)
           sum_matrix += 1
           del available[i]
+          #min_j = pixel[1] if pixel[1] < min_j else min_j
         i = i + 1
   segmented_matrix = np.array(segmented_matrix)
   return segmented_matrix
 
 if __name__ == '__main__':
-  alpha_cut = input_normalized('Ingresa el valor de corte: ')
+  alpha_cut = input_normalized('Ingresa el valor de corte: ',[1,254])
   #grey_img = np.array([[78,86,88,97,104],[85,92,97,103,111],[93,98,103,109,114],[100,105,111,116,120],[105,112,117,122,128],[10,19,11,10,12]])
   image_name = "mina_cortada.png"
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
   print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)
   segmented_image = segment_image(grey_img,alpha_cut)
+  print(segmented_image)
   print_matrix(image_name+'_segmented_matrix.csv', segmented_image)
   cv.imwrite(image_name+"segmented_matrix.png", segmented_image)
