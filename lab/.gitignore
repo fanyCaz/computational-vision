@@ -1,6 +1,7 @@
 *_.txt
 *.png
 *.jpeg
+*.jpg
 bin/
 include/
 lib/
