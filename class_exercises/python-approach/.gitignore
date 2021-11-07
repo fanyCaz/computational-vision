@@ -8,5 +8,6 @@ share/
 *.jpeg
 *.txt
 *.jpg
+*.svg
 __pycache__*/
 *.csv

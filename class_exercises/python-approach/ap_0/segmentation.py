@@ -69,7 +69,7 @@ def segment_image(image,alpha_cut):
 if __name__ == '__main__':
   alpha_cut = input_normalized('Ingresa el valor de corte: ')
   #grey_img = np.array([[78,86,88,97,104],[85,92,97,103,111],[93,98,103,109,114],[100,105,111,116,120],[105,112,117,122,128],[10,19,11,10,12]])
-  image_name = "mina_cortada.png"
+  image_name = "ajedrez.jpeg"
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
   print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)

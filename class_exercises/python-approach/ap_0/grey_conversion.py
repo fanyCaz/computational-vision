@@ -22,7 +22,6 @@ def convert_to_greyscale(image):
   red_freq = 1/3
   green_freq = 1/3
   blue_freq = 1/3
-  utils.print_matrix('rgb_intesities_estrellas.txt',image)
   for i, row in enumerate(image):
     row_pixels = list(map(lambda pixel: math.trunc(blue_freq*pixel[0] + green_freq*pixel[1] + red_freq*pixel[2]),row))
     grey_matrix.append(row_pixels)
