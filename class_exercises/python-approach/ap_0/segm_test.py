@@ -3,6 +3,8 @@ import numpy as np
 from utils import print_matrix, input_normalized
 import grey_conversion as grey_cv
 from umbral import umbral_selection as u_binario
+from colors import init_colors
+from random import randrange as rand
 
 #c_i current i
 #c_j current j
@@ -19,15 +21,13 @@ def getAvailableNeighbours(image,c_i,c_j,alread_used):
         available.append([i,j])
   return available
 
-def getNexPivot(image,alread_used):
+def getNexPivot(image,alread_used,last_i):
   #search for next pixel not used
   #numpy lambda no usado
-  print("Encontrando pivote")
-  for row in range(0,len(image)):
+  for row in range(last_i,len(image)):
     for column in range(0,len(image[0])):
       #decidir si no es 0 el valor de esa coordenada
       if [int(row),int(column)] not in alread_used:
-        print("Pivote encontrado")
         return [row,column]
 
 """
@@ -36,26 +36,33 @@ def getNexPivot(image,alread_used):
   En el vecindario se pone el valor de shade del pivote
   El pivot es la posición del pivote actual
 """
-def segment_image(image,alpha_cut):
+def segment_image(image,alpha_cut,original):
+  colors = init_colors()
+  colors_size = len(colors)
   segmented_matrix = image
   no_rows = len(image)
   no_columns = len(image[0])
   sum_matrix = 0
   used = []
   total_sum = no_rows * no_columns
+  pivot = [0,0]
+  neighbours_count = 0
+  #colored_matrix = np.zeros((no_rows,no_columns))
+  print(original[0,0])
   while sum_matrix != total_sum:
     print(f"suma {sum_matrix} multi {total_sum}")
     if sum_matrix == 0:
-      pivot = [0,0]
+      pass
+      #pivot = [0,0]
     else:
-      #pivot = [min_i,min_j]
-      pivot = getNexPivot(image,used)
+      pivot = getNexPivot(image,used,pivot[0])
     row = pivot[0]
     column = pivot[1]
     value_pivot = image[row,column]
     available = []
     available = getAvailableNeighbours(image,row,column,used)
     i = 0
+    color_iteration = rand(0,colors_size)
     # Agrega los vecinos mientras va buscando
     if len(available) > 0:
       while i < len(available):
@@ -66,12 +73,17 @@ def segment_image(image,alpha_cut):
           available = available + getAvailableNeighbours(image,pixel[0],pixel[1],used)
           segmented_matrix[pixel[0],pixel[1]] = int(value_pivot)
           sum_matrix += 1
+          #print(f"valores {value_pivot} pixel: {pixel}")
           del available[i]
           #min i -> este es donde esta la row , min_columna->
           #haz una iteracion general, para encontrar pivotes
+          ## COLOR IN IMAGE
+          original[pixel[0],pixel[1]] = colors[color_iteration]
         i = i + 1
+    neighbours_count += 1
+  print(f"Cantidad de vecindarios: {neighbours_count}")
   segmented_matrix = np.array(segmented_matrix)
-  return segmented_matrix
+  return segmented_matrix, original
 
 def test():
   alpha_cut = input_normalized('Ingresa el valor de corte: ',[1,254])
@@ -81,19 +93,23 @@ def test():
 
 def prod():
   alpha_cut = input_normalized('Ingresa el valor de corte: ',[1,254])
-  image_name = "mina_cortada.png"
+  image_name = "icon_call.png"
   print(f"Imagen {image_name}")
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
+  binarizar = False
+  #if binarizar:
+  #  grey_img = u_binario(grey_img,85)
   print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)
-  segmented_image = segment_image(grey_img,alpha_cut)
+  segmented_image,coloured = segment_image(grey_img,alpha_cut,img)
   print_matrix(image_name+'_segmented_matrix.csv', segmented_image)
-  cv.imwrite(image_name+"segmented_matrix.png", segmented_image)
+  cv.imwrite(image_name+"_segmented_matrix.png", segmented_image)
+  cv.imwrite(image_name+"_colored_segmented_matrix.png", coloured)
 
 if __name__ == '__main__':
   #CREA UNA LISTA DE PIVOTES CANDIDATOS
   #CHECA SI QUITANDO ESA CONDICION SI FUNCIONA BIEN CON LA MATRIZ DE EJEMPLO
   #PONER COLOR EN IMAGEN DEPENDIENDO DEL VECINDARIO, Y DEBEN SER DIFERENTES PARA PODER DISTINGUIRLOS BIEN
   #PASAR IMAGEN A COLORES CON OPENCV
-  test()
-  #prod()
+  #test()
+  prod()
