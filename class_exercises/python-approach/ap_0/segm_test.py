@@ -98,8 +98,8 @@ def prod():
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
   binarizar = False
-  #if binarizar:
-  #  grey_img = u_binario(grey_img,85)
+  if binarizar:
+    grey_img = u_binario(grey_img,85)
   print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)
   segmented_image,coloured = segment_image(grey_img,alpha_cut,img)
   print_matrix(image_name+'_segmented_matrix.csv', segmented_image)

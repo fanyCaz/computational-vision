@@ -1,4 +1,6 @@
 def init_colors():
+  #got colors from:
+  #https://www.webucator.com/article/python-color-constants-module/
   ALICEBLUE = [240, 248, 255]
   ANTIQUEWHITE = [250, 235, 215]
   AQUA = [0, 255, 255]
