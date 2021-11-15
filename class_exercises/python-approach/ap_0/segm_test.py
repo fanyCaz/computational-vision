@@ -23,10 +23,8 @@ def getAvailableNeighbours(image,c_i,c_j,alread_used):
 
 def getNexPivot(image,alread_used,last_i):
   #search for next pixel not used
-  #numpy lambda no usado
   for row in range(last_i,len(image)):
     for column in range(0,len(image[0])):
-      #decidir si no es 0 el valor de esa coordenada
       if [int(row),int(column)] not in alread_used:
         return [row,column]
 
@@ -93,13 +91,13 @@ def test():
 
 def prod():
   alpha_cut = input_normalized('Ingresa el valor de corte: ',[1,254])
-  image_name = "icon_call.png"
+  image_name = "ts.jpeg"
   print(f"Imagen {image_name}")
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
   binarizar = False
   if binarizar:
-    grey_img = u_binario(grey_img,85)
+    grey_img = u_binario(grey_img,95)
   print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)
   segmented_image,coloured = segment_image(grey_img,alpha_cut,img)
   print_matrix(image_name+'_segmented_matrix.csv', segmented_image)
