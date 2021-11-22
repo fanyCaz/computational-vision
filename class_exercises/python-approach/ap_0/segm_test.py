@@ -91,7 +91,7 @@ def test():
 
 def prod():
   alpha_cut = input_normalized('Ingresa el valor de corte: ',[1,254])
-  image_name = "ts.jpeg"
+  image_name = "ajedrez_corto.jpeg"
   print(f"Imagen {image_name}")
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)

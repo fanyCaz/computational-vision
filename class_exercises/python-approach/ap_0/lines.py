@@ -60,6 +60,49 @@ def cleanMatrix(image):
   clean = np.array(clean)
   return clean
 
+def findRansac(image,borders,colors,umbral,grey_img):
+  coloured = copy.deepcopy(image)
+  for i,border in enumerate(borders):
+    color_it = rand(0,len(colors))
+    for k in borders[i]:
+      coloured[k[0],k[1]] = colors[color_it]
+  #cv.imwrite("rayas_colored_segmented_matrix.png", coloured)
+
+  cleanImg = cleanMatrix(image)
+  border_grosor = int(input_normalized('Ingresa el grosor de borde: ',[1,20]))
+  Mmax = 0
+  imax = 0
+  jmax = 0
+  line = []
+  for i,border in enumerate(borders):
+    M = 0
+    for k in borders[i]:
+      print("K valor es pixel")
+      print(k)
+      if pointIsWithinThreshold(grey_img,grey_img[k[0],k[1]],k[0],k[1],border_grosor,umbral):
+        M += 1
+        #aqui se agrega a la linea que es?
+    if M > Mmax:
+      Mmax = M
+    #imax = k[i] #i -> k[i]
+    #jmax = k[j] #j -> k[j]
+    #i
+    #ii  i
+    #iiiii
+    #------
+    #aqui se agrega el histograma
+    #termina aqui un borde
+    print(f"M {M} mmax {Mmax} i {imax} j {jmax}")
+  # coloured lines
+  return 0
+
+def HoughTransform(image):
+  H = copy.deepcopy(image)
+  #H aqui se pone todo en ceros, y cuando recorro los bordes
+  # y encuentro un borde, resalto, agrego 10 en la intensidad de la imagen
+  return 0
+
+
 """
   El arreglo available debe permanecer como vacío
     al principio de cada iteración.
@@ -114,6 +157,47 @@ def segment_image(image,alpha_cut,original):
   segmented_matrix = np.array(segmented_matrix)
 
   ### BORDERS
+  #findRansac(original, borders,colors,alpha_cut,image)
+  cv.imwrite("borders_colored_segmented_matrix.png", original)
+  # HOUGH
+  H = copy.deepcopy(image)
+  h_matrix = []
+  for row in H:
+    #row_pixels = list(map(lambda pixel: 0 if pixel < umbral else 255,row))
+    row_pixels = list(map(lambda pixel: 0,row))
+    h_matrix.append(row_pixels)
+  h_matrix = np.array(h_matrix)
+
+  #Binarizar imagen
+  grey_img = u_binario(segmented_matrix,85)
+  cv.imwrite("binary_borders_colored_segmented_matrix.png", segmented_matrix)
+  
+  grey_img = copy.deepcopy(image)
+  #RANSAC
+  m_max = 0
+  border_grosor = 1
+  umbral = 85
+  lines = {}
+  #print(borders)
+  for i,border in enumerate(borders):
+    M = 0
+    lines[i] = []
+    for k in borders[i]:
+      if pointIsWithinThreshold(grey_img,grey_img[k[0],k[1]],k[0],k[1],border_grosor,umbral):
+        M += 1
+        lines[i].append([k[0],k[1]])
+    if M > m_max:
+      m_max = M
+  coloured = copy.deepcopy(original)
+  print(lines)
+  for i,line in enumerate(lines):
+    color_it = rand(0,len(colors))
+    print(f"i::{i+1} lines: {lines[i]}")
+    for k in lines[i]:
+      coloured[k[0],k[1]] = colors[color_it]
+
+  cv.imwrite("liness_1_colored_segmented_matrix.png", coloured)
+  
   return segmented_matrix, original
 
 def test():
@@ -125,7 +209,7 @@ def test():
 
 def prod():
   alpha_cut = input_normalized('Ingresa el valor de corte: ',[1,254])
-  image_name = "figuras.jpeg"
+  image_name = "lines.jpeg"
   print(f"Imagen {image_name}")
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
