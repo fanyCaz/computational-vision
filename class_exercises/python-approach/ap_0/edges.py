@@ -70,6 +70,7 @@ def segment_image(image,alpha_cut,original):
   colors = init_colors()
   colors_size = len(colors)
   segmented_matrix = copy.deepcopy(image)
+  border_matrix = copy.deepcopy(image)
   no_rows = len(image)
   no_columns = len(image[0])
   sum_matrix = 0
@@ -108,11 +109,13 @@ def segment_image(image,alpha_cut,original):
             borders[neighbours_count].append( [pixel[0],pixel[1]] )
           ## COLOR IN IMAGE
             original[pixel[0],pixel[1]] = colors[color_iteration]
+            border_matrix[pixel[0],pixel[1]] = 1
         i = i + 1
     neighbours_count += 1
   print(f"Cantidad de vecindarios: {neighbours_count}")
   segmented_matrix = np.array(segmented_matrix)
-
+  border_matrix = np.array(border_matrix)
+  print_matrix('borders_segmented_matrix.csv', border_matrix)
   ### BORDERS
   return segmented_matrix, original
 

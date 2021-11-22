@@ -149,8 +149,6 @@ def segment_image(image,alpha_cut,original):
           del available[i]
           if isBorder(image,current_pixel,pixel[0],pixel[1],alpha_cut):
             borders[neighbours_count].append( [pixel[0],pixel[1]] )
-          ## COLOR IN IMAGE
-            original[pixel[0],pixel[1]] = colors[color_iteration]
         i = i + 1
     neighbours_count += 1
   print(f"Cantidad de vecindarios: {neighbours_count}")
@@ -185,6 +183,7 @@ def segment_image(image,alpha_cut,original):
     for k in borders[i]:
       if pointIsWithinThreshold(grey_img,grey_img[k[0],k[1]],k[0],k[1],border_grosor,umbral):
         M += 1
+        h_matrix[k[0],k[1]] = h_matrix[k[0],k[1]] + 1
         lines[i].append([k[0],k[1]])
     if M > m_max:
       m_max = M
@@ -196,8 +195,18 @@ def segment_image(image,alpha_cut,original):
     for k in lines[i]:
       coloured[k[0],k[1]] = colors[color_it]
 
-  cv.imwrite("liness_1_colored_segmented_matrix.png", coloured)
-  
+  cv.imwrite("liness_2_colored_segmented_matrix.png", coloured)
+  print("Print values of hough HoughTransform")
+  print(h_matrix)
+  print_matrix('hough.csv',h_matrix)
+  #lines_coloured = copy.deepcopy(original)
+  lines_coloured = []
+  for i,row in enumerate(h_matrix):
+    color_it = rand(0,len(colors))
+    row_pixels = list(map(lambda pixel: 0 if pixel == 1 else 255,row))
+    lines_coloured.append(row_pixels)
+  lines_coloured = np.array(lines_coloured)
+  cv.imwrite("liness_hough_1_colored_segmented_matrix.png", lines_coloured)
   return segmented_matrix, original
 
 def test():
@@ -217,7 +226,7 @@ def prod():
   if binarizar:
     grey_img = u_binario(grey_img,85)
   segmented_image,coloured = segment_image(grey_img,alpha_cut,img)
-  printFiles = True
+  printFiles = False
   if printFiles:
     print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)
     print_matrix(image_name+'_segmented_matrix.csv', segmented_image)
