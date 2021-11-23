@@ -17,7 +17,6 @@ def getAvailableNeighbours(image,c_i,c_j,alread_used):
   for i in range(c_i-1,c_i+2):
     for j in range(c_j-1,c_j+2):
       is_in_range = i >= 0 and j >= 0 and i < no_rows and j < no_columns
-      #if is_in_range and [i,j] not in alread_used:
       if is_in_range:
         available.append([i,j])
   return available
@@ -46,7 +45,6 @@ def pointIsWithinThreshold(image,pixel,c_i,c_j,grosor,threshold):
 
 def getNexPivot(image,alread_used,last_i):
   #search for next pixel not used
-  print(f"last i {last_i}")
   for row in range(last_i,len(image)):
     for column in range(0,len(image[0])):
       if [int(row),int(column)] not in alread_used:
@@ -60,56 +58,13 @@ def cleanMatrix(image):
   clean = np.array(clean)
   return clean
 
-def findRansac(image,borders,colors,umbral,grey_img):
-  coloured = copy.deepcopy(image)
-  for i,border in enumerate(borders):
-    color_it = rand(0,len(colors))
-    for k in borders[i]:
-      coloured[k[0],k[1]] = colors[color_it]
-  #cv.imwrite("rayas_colored_segmented_matrix.png", coloured)
-
-  cleanImg = cleanMatrix(image)
-  border_grosor = int(input_normalized('Ingresa el grosor de borde: ',[1,20]))
-  Mmax = 0
-  imax = 0
-  jmax = 0
-  line = []
-  for i,border in enumerate(borders):
-    M = 0
-    for k in borders[i]:
-      print("K valor es pixel")
-      print(k)
-      if pointIsWithinThreshold(grey_img,grey_img[k[0],k[1]],k[0],k[1],border_grosor,umbral):
-        M += 1
-        #aqui se agrega a la linea que es?
-    if M > Mmax:
-      Mmax = M
-    #imax = k[i] #i -> k[i]
-    #jmax = k[j] #j -> k[j]
-    #i
-    #ii  i
-    #iiiii
-    #------
-    #aqui se agrega el histograma
-    #termina aqui un borde
-    print(f"M {M} mmax {Mmax} i {imax} j {jmax}")
-  # coloured lines
-  return 0
-
-def HoughTransform(image):
-  H = copy.deepcopy(image)
-  #H aqui se pone todo en ceros, y cuando recorro los bordes
-  # y encuentro un borde, resalto, agrego 10 en la intensidad de la imagen
-  return 0
-
-
 """
   El arreglo available debe permanecer como vacío
     al principio de cada iteración.
   En el vecindario se pone el valor de shade del pivote
   El pivot es la posición del pivote actual
 """
-def segment_image(image,alpha_cut,original):
+def segment_image(image,alpha_cut,original,name):
   colors = init_colors()
   colors_size = len(colors)
   segmented_matrix = copy.deepcopy(image)
@@ -157,7 +112,7 @@ def segment_image(image,alpha_cut,original):
   ### BORDERS
   #findRansac(original, borders,colors,alpha_cut,image)
   cv.imwrite("borders_colored_segmented_matrix.png", original)
-  # HOUGH
+  # Clean matrix to use in HOUGH
   H = copy.deepcopy(image)
   h_matrix = []
   for row in H:
@@ -169,14 +124,13 @@ def segment_image(image,alpha_cut,original):
   #Binarizar imagen
   grey_img = u_binario(segmented_matrix,85)
   cv.imwrite("binary_borders_colored_segmented_matrix.png", segmented_matrix)
-  
+
   grey_img = copy.deepcopy(image)
-  #RANSAC
+  #RANSAC and HOUGH
   m_max = 0
   border_grosor = 1
   umbral = 85
   lines = {}
-  #print(borders)
   for i,border in enumerate(borders):
     M = 0
     lines[i] = []
@@ -185,28 +139,24 @@ def segment_image(image,alpha_cut,original):
         M += 1
         h_matrix[k[0],k[1]] = h_matrix[k[0],k[1]] + 1
         lines[i].append([k[0],k[1]])
-    if M > m_max:
-      m_max = M
+      if M > m_max:
+        m_max = M
   coloured = copy.deepcopy(original)
-  print(lines)
   for i,line in enumerate(lines):
     color_it = rand(0,len(colors))
-    print(f"i::{i+1} lines: {lines[i]}")
     for k in lines[i]:
       coloured[k[0],k[1]] = colors[color_it]
 
-  cv.imwrite("liness_2_colored_segmented_matrix.png", coloured)
+  cv.imwrite(name+"liness_2_colored_segmented_matrix.png", coloured)
   print("Print values of hough HoughTransform")
-  print(h_matrix)
-  print_matrix('hough.csv',h_matrix)
-  #lines_coloured = copy.deepcopy(original)
+  print_matrix(name+'hough.csv',h_matrix)
   lines_coloured = []
   for i,row in enumerate(h_matrix):
     color_it = rand(0,len(colors))
-    row_pixels = list(map(lambda pixel: 0 if pixel == 1 else 255,row))
+    row_pixels = list(map(lambda pixel: 0 if pixel >= 1 else 255,row))
     lines_coloured.append(row_pixels)
   lines_coloured = np.array(lines_coloured)
-  cv.imwrite("liness_hough_1_colored_segmented_matrix.png", lines_coloured)
+  cv.imwrite(name+"liness_hough_1_colored_segmented_matrix.png", lines_coloured)
   return segmented_matrix, original
 
 def test():
@@ -218,14 +168,14 @@ def test():
 
 def prod():
   alpha_cut = input_normalized('Ingresa el valor de corte: ',[1,254])
-  image_name = "lines.jpeg"
+  image_name = "corner.png"
   print(f"Imagen {image_name}")
   img = cv.imread(image_name)
   grey_img = grey_cv.convert_to_greyscale(img)
   binarizar = True
   if binarizar:
     grey_img = u_binario(grey_img,85)
-  segmented_image,coloured = segment_image(grey_img,alpha_cut,img)
+  segmented_image,coloured = segment_image(grey_img,alpha_cut,img,image_name)
   printFiles = False
   if printFiles:
     print_matrix(image_name+'_before_segmented_matrix.csv', grey_img)
