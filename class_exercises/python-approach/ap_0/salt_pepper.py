@@ -1,3 +1,5 @@
+
+
 import numpy as np
 import cv2 as cv
 from scipy import stats
@@ -9,12 +11,12 @@ def noise_removal(image, alpha_cut):
   noiseless_matrix = []
 
   flatten_img = image.flatten()
-  mode = stats.mode(flatten_img)[0][0]
+  median = np.median(sorted_img)
   #Aqui le aplicaria un unmbral con la moda y a partir de ahi aplicaria el :
   # mode if ((abs(mean-pixel)*100/mean)) > 7 else pixel ???
 
   for row in image:
-    row_pixels = list(map(lambda pixel: mode if ((abs(mode-pixel)*100/mode)) > 60 else pixel, row))
+    row_pixels = list(map(lambda pixel: median if ((abs(median-pixel)*100/mode)) > 60 else pixel, row))
     noiseless_matrix.append(row_pixels)
   noiseless = np.array(noiseless_matrix)
   return noiseless
